@@ -1,1 +1,1 @@
-# Devops_Dirk-Jan-Remon
+[![coverage](https://github.com/avans-devops/avans-devops-2324-dirk-jan/actions/workflows/linter.yml/badge.svg)](https://github.com/avans-devops/avans-devops-2324-dirk-jan/actions/workflows/linter.yml)

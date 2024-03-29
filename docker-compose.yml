@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  
+  # Database - Mongo DB
+
+  api:
+    build: ./api
+    ports:
+      - 3000:3000
+    depends_on:
+    - mongo
+    environment:
+      MONGO_URL: "mongodb://mongo:27017"
+      DB_NAME: "mydb"
+    links:
+        - mongo
+  frontend: 
+    build: ./front-end
+    ports:
+      - 8080:8080
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root
+      ME_CONFIG_MONGODB_PORT: 27017
+    restart: always
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  # # Database Manager
+  # mongo-express:
+  #   image: mongo-express
+  #   ports:
+  #     - 8099:8081
+  #   depends_on:
+  #     - mongo
+  #   environment:
+  #     ME_CONFIG_BASICAUTH_USERNAME: express
+  #     ME_CONFIG_BASICAUTH_PASSWORD: 123456
+  #     ME_CONFIG_MONGODB_PORT: 27017
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: test
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
+  #   restart: always
+  #   links:
+  #     - mongo

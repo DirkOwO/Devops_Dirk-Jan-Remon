@@ -1,0 +1,44 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./api
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies api
+        run: npm install
+        
+      - name: Run tests and generate coverage report
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          test-script: npm test
+          working-directory: ./api
+
+      - name: Run linting api
+        run: npm run lint
+
+      - name: Install dependencies frontend
+        run: npm install
+        working-directory: ./front-end
+
+      - name: Run linting front-end
+        run: npm run lint
+        working-directory: ./front-end
