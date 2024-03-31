@@ -5,9 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const cors=require('cors');
+const cors = require('cors');
 const corsOptions ={
-	origin:'http://localhost:8080',
+	origin:'http://127.0.0.1:8080',
 	credentials:true,
 	optionSuccessStatus:200,
 };
@@ -48,7 +48,7 @@ if (cluster.isMaster) {
 		
 	});
 
-	const server = app.listen(3000, () => {
+	app.listen(3000, () => {
 	console.log(`Worker process ${process.pid} is listening on port 3000`);
 	});
 }

@@ -3,6 +3,15 @@ version: '3.8'
 services:
   messagebus:
     image: rabbitmq:latest
+    container_name: messagebus
+    hostname: "messagebus"
+    labels:
+      NAME: "messagebus"
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 5673:5673
+      - 5674:5674
   api:
     build: ./api
     ports:
@@ -45,3 +54,13 @@ services:
         condition: on-failure
     depends_on:
       - messagebus
+  gateway:
+    build: './gateway'
+    deploy:
+      restart_policy: 
+        condition: on-failure
+    depends_on:
+      - api
+      - frontend
+    ports:
+      - 4000:4000
