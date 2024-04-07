@@ -32,7 +32,7 @@ services:
   frontend: 
     build: ./front-end
     ports:
-      - 8080:8080
+      - 8080:80
   mongo:
     image: mongo
     ports:
