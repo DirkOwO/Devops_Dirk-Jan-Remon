@@ -27,7 +27,7 @@ const cluster = require('cluster');
 const os = require('os');
 const numCPUs = os.cpus().length;
 
-if (cluster.isMaster) {
+if (require.main === module && cluster.isMaster) {
 	console.log(`Master process ${process.pid} is running`);
 
 	for (let i = 0; i < numCPUs; i++) {
@@ -66,4 +66,7 @@ if (cluster.isMaster) {
 	app.listen(process.env.PORT, () => {
 		console.log(`Express server is listening on port ${process.env.PORT}`);
 	});
+
+	if (require.main !== module)
+		module.exports = app;
 }
