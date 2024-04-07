@@ -6,6 +6,19 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const cors = require('cors');
+require('dotenv').config()
+
+var socket = require('./socketapi')
+var promBundle = require('express-prom-bundle')
+const metricsMiddleware = promBundle({
+	includePath: true,
+	includeStatusCode: true,
+	normalizePath: true,
+	promClient: {
+		collectDefaultMetrics: {}
+	}
+})
+
 const corsOptions ={
 	origin:'http://127.0.0.1:8080',
 	credentials:true,
@@ -34,6 +47,9 @@ if (cluster.isMaster) {
 	app.use(express.urlencoded({ extended: false }));
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, 'public')));
+
+	app.use(metricsMiddleware)
+
 	app.use('/', indexRouter);
 	app.use('/users', usersRouter);
 	app.use(function(req, res, next) {
@@ -48,7 +64,9 @@ if (cluster.isMaster) {
 		
 	});
 
-	app.listen(3000, () => {
-	console.log(`Worker process ${process.pid} is listening on port 3000`);
+	const server = app.listen(process.env.PORT, () => {
+		console.log('Express server is listening on port 3000');
 	});
+
+	socket.io.attach(server)
 }
