@@ -1,40 +1,4 @@
 {
-    "__inputs": [
-      {
-        "name": "DS_PROMETHEUS",
-        "label": "prometheus",
-        "description": "",
-        "type": "datasource",
-        "pluginId": "prometheus",
-        "pluginName": "Prometheus"
-      }
-    ],
-    "__requires": [
-      {
-        "type": "grafana",
-        "id": "grafana",
-        "name": "Grafana",
-        "version": "6.0.1"
-      },
-      {
-        "type": "panel",
-        "id": "graph",
-        "name": "Graph",
-        "version": "5.0.0"
-      },
-      {
-        "type": "datasource",
-        "id": "prometheus",
-        "name": "Prometheus",
-        "version": "5.0.0"
-      },
-      {
-        "type": "panel",
-        "id": "singlestat",
-        "name": "Singlestat",
-        "version": "5.0.0"
-      }
-    ],
     "annotations": {
       "list": [
         {
@@ -52,8 +16,8 @@
     "editable": true,
     "gnetId": 11159,
     "graphTooltip": 0,
-    "id": null,
-    "iteration": 1573392431370,
+    "id": 18,
+    "iteration": 1598203753988,
     "links": [],
     "panels": [
       {
@@ -61,14 +25,22 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
         "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
           "h": 7,
           "w": 10,
           "x": 0,
           "y": 0
         },
+        "hiddenSeries": false,
         "id": 6,
         "legend": {
           "alignAsTable": true,
@@ -84,27 +56,33 @@
         "linewidth": 1,
         "links": [],
         "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
         "paceLength": 10,
         "percentage": false,
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
         "seriesOverrides": [],
+        "spaceLength": 10,
         "stack": false,
         "steppedLine": false,
         "targets": [
           {
-            "expr": "irate(process_cpu_user_seconds_total{instance=~\"$instance\"}[2m]) * 100",
+            "expr": "irate(process_cpu_user_seconds_total{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}[1m]) * 100",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "User CPU - {{instance}}",
+            "legendFormat": "User CPU - {{pod_name}}",
             "refId": "A"
           },
           {
-            "expr": "irate(process_cpu_system_seconds_total{instance=~\"$instance\"}[2m]) * 100",
+            "expr": "irate(process_cpu_system_seconds_total{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}[1m]) * 100",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Sys CPU - {{instance}}",
+            "legendFormat": "Sys CPU - {{pod_name}}",
             "refId": "B"
           }
         ],
@@ -154,14 +132,22 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
         "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
           "h": 7,
           "w": 9,
           "x": 10,
           "y": 0
         },
+        "hiddenSeries": false,
         "id": 8,
         "legend": {
           "alignAsTable": true,
@@ -177,20 +163,25 @@
         "linewidth": 1,
         "links": [],
         "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
         "paceLength": 10,
         "percentage": false,
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
         "seriesOverrides": [],
+        "spaceLength": 10,
         "stack": false,
         "steppedLine": false,
         "targets": [
           {
-            "expr": "nodejs_eventloop_lag_seconds{instance=~\"$instance\"}",
+            "expr": "nodejs_eventloop_lag_seconds{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "{{instance}}",
+            "legendFormat": "{{pod_name}}",
             "refId": "A"
           }
         ],
@@ -244,7 +235,13 @@
           "rgba(237, 129, 40, 0.89)",
           "#d44a3a"
         ],
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
         "format": "none",
         "gauge": {
           "maxValue": 100,
@@ -329,7 +326,13 @@
           "rgba(237, 129, 40, 0.89)",
           "#d44a3a"
         ],
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
         "format": "none",
         "gauge": {
           "maxValue": 100,
@@ -381,10 +384,11 @@
         "tableColumn": "",
         "targets": [
           {
-            "expr": "sum(changes(process_start_time_seconds{instance=~\"$instance\"}[1m]))",
+            "expr": "sum(changes(process_start_time_seconds{namespace=\"$namespace\",pod_name=\"$pod\"}[1m]))",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "{{instance}}",
+            "legendFormat": "{{pod_name}}",
             "refId": "A"
           }
         ],
@@ -408,14 +412,22 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
         "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
-          "h": 7,
-          "w": 16,
+          "h": 10,
+          "w": 12,
           "x": 0,
           "y": 7
         },
+        "hiddenSeries": false,
         "id": 7,
         "legend": {
           "alignAsTable": true,
@@ -423,7 +435,7 @@
           "current": true,
           "max": true,
           "min": true,
-          "rightSide": true,
+          "rightSide": false,
           "show": true,
           "total": false,
           "values": true
@@ -432,34 +444,41 @@
         "linewidth": 1,
         "links": [],
         "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
         "paceLength": 10,
         "percentage": false,
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
         "seriesOverrides": [],
+        "spaceLength": 10,
         "stack": false,
         "steppedLine": false,
         "targets": [
           {
-            "expr": "process_resident_memory_bytes{instance=~\"$instance\"}",
+            "expr": "process_resident_memory_bytes{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Process Memory - {{instance}}",
+            "legendFormat": "Process Memory - {{pod_name}}",
             "refId": "A"
           },
           {
-            "expr": "nodejs_heap_size_total_bytes{instance=~\"$instance\"}",
+            "expr": "nodejs_heap_size_total_bytes{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Heap Total - {{instance}}",
+            "legendFormat": "Heap Total - {{pod_name}}",
             "refId": "B"
           },
           {
-            "expr": "nodejs_heap_size_used_bytes{instance=~\"$instance\"}",
+            "expr": "nodejs_heap_size_used_bytes{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Heap Used - {{instance}}",
+            "legendFormat": "Heap Used - {{pod_name}}",
             "refId": "C"
           },
           {
@@ -516,14 +535,22 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
         "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
-          "h": 7,
-          "w": 8,
-          "x": 16,
+          "h": 10,
+          "w": 12,
+          "x": 12,
           "y": 7
         },
+        "hiddenSeries": false,
         "id": 9,
         "legend": {
           "alignAsTable": true,
@@ -539,27 +566,33 @@
         "linewidth": 1,
         "links": [],
         "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
         "paceLength": 10,
         "percentage": false,
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
         "seriesOverrides": [],
+        "spaceLength": 10,
         "stack": false,
         "steppedLine": false,
         "targets": [
           {
-            "expr": "nodejs_active_handles_total{instance=~\"$instance\"}",
+            "expr": "nodejs_active_handles_total{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Active Handler - {{instance}}",
+            "legendFormat": "Active Handler - {{pod_name}}",
             "refId": "A"
           },
           {
-            "expr": "nodejs_active_requests_total{instance=~\"$instance\"}",
+            "expr": "nodejs_active_requests_total{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\"}",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Active Request - {{instance}}",
+            "legendFormat": "Active Request - {{pod_name}}",
             "refId": "B"
           }
         ],
@@ -609,101 +642,22 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
-        "fill": 1,
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 0,
-          "y": 14
-        },
-        "id": 10,
-        "legend": {
-          "alignAsTable": true,
-          "avg": true,
-          "current": true,
-          "max": true,
-          "min": true,
-          "rightSide": false,
-          "show": true,
-          "total": false,
-          "values": true
-        },
-        "lines": true,
-        "linewidth": 1,
-        "links": [],
-        "nullPointMode": "null",
-        "paceLength": 10,
-        "percentage": false,
-        "pointradius": 2,
-        "points": false,
-        "renderer": "flot",
-        "seriesOverrides": [],
-        "stack": false,
-        "steppedLine": false,
-        "targets": [
-          {
-            "expr": "nodejs_heap_space_size_total_bytes{instance=~\"$instance\"}",
-            "format": "time_series",
-            "intervalFactor": 1,
-            "legendFormat": "Heap Total - {{instance}} - {{space}}",
-            "refId": "A"
-          }
-        ],
-        "thresholds": [],
-        "timeFrom": null,
-        "timeRegions": [],
-        "timeShift": null,
-        "title": "Heap Total Detail",
-        "tooltip": {
-          "shared": true,
-          "sort": 0,
-          "value_type": "individual"
-        },
-        "type": "graph",
-        "xaxis": {
-          "buckets": null,
-          "mode": "time",
-          "name": null,
-          "show": true,
-          "values": []
-        },
-        "yaxes": [
-          {
-            "format": "bytes",
-            "label": null,
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
           },
-          {
-            "format": "short",
-            "label": null,
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true
-          }
-        ],
-        "yaxis": {
-          "align": false,
-          "alignLevel": null
-        }
-      },
-      {
-        "aliasColors": {},
-        "bars": false,
-        "dashLength": 10,
-        "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
-        "fill": 1,
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 8,
-          "y": 14
+          "overrides": []
         },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "hiddenSeries": false,
         "id": 11,
         "legend": {
           "alignAsTable": true,
@@ -711,7 +665,6 @@
           "current": true,
           "max": true,
           "min": true,
-          "rightSide": false,
           "show": true,
           "total": false,
           "values": true
@@ -720,28 +673,47 @@
         "linewidth": 1,
         "links": [],
         "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
         "paceLength": 10,
         "percentage": false,
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
         "seriesOverrides": [],
+        "spaceLength": 10,
         "stack": false,
         "steppedLine": false,
         "targets": [
           {
-            "expr": "nodejs_heap_space_size_used_bytes{instance=~\"$instance\"}",
+            "expr": "rate(nodejs_gc_duration_seconds_count{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\",kind=\"minor\"}[1m])",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Heap Used - {{instance}} - {{space}}",
+            "legendFormat": "minor : {{pod_name}}",
             "refId": "A"
+          },
+          {
+            "expr": "rate(nodejs_gc_duration_seconds_count{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\",kind=\"incremental\"}[1m])",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "incremental : {{pod_name}}",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(nodejs_gc_duration_seconds_count{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\",kind=\"major\"}[1m])",
+            "interval": "",
+            "legendFormat": "major : {{pod_name}}",
+            "refId": "C"
           }
         ],
         "thresholds": [],
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "Heap Used Detail",
+        "title": "GC Counts",
         "tooltip": {
           "shared": true,
           "sort": 0,
@@ -757,7 +729,7 @@
         },
         "yaxes": [
           {
-            "format": "bytes",
+            "format": "short",
             "label": null,
             "logBase": 1,
             "max": null,
@@ -783,22 +755,29 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "${DS_PROMETHEUS}",
-        "fill": 1,
-        "gridPos": {
-          "h": 8,
-          "w": 8,
-          "x": 16,
-          "y": 14
+        "datasource": "Prometheus",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
         },
-        "id": 12,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "hiddenSeries": false,
+        "id": 10,
         "legend": {
           "alignAsTable": true,
           "avg": true,
           "current": true,
           "max": true,
           "min": true,
-          "rightSide": false,
           "show": true,
           "total": false,
           "values": true
@@ -807,28 +786,45 @@
         "linewidth": 1,
         "links": [],
         "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
         "paceLength": 10,
         "percentage": false,
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
         "seriesOverrides": [],
+        "spaceLength": 10,
         "stack": false,
         "steppedLine": false,
         "targets": [
           {
-            "expr": "nodejs_heap_space_size_available_bytes{instance=~\"$instance\"}",
+            "expr": "rate(nodejs_gc_duration_seconds_sum{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\",kind=\"minor\"}[1m])",
             "format": "time_series",
+            "interval": "",
             "intervalFactor": 1,
-            "legendFormat": "Heap Used - {{instance}} - {{space}}",
+            "legendFormat": "minor : {{pod_name}}",
             "refId": "A"
+          },
+          {
+            "expr": "rate(nodejs_gc_duration_seconds_sum{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\",kind=\"incremental\"}[1m])",
+            "interval": "",
+            "legendFormat": "incremental : {{pod_name}}",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(nodejs_gc_duration_seconds_sum{namespace=~\"$namespace.*\",pod_name=~\"$pod.*\",kind=\"major\"}[1m])",
+            "interval": "",
+            "legendFormat": "major : {{pod_name}}",
+            "refId": "C"
           }
         ],
         "thresholds": [],
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "Heap Available Detail",
+        "title": "GC time",
         "tooltip": {
           "shared": true,
           "sort": 0,
@@ -844,7 +840,7 @@
         },
         "yaxes": [
           {
-            "format": "bytes",
+            "format": "s",
             "label": null,
             "logBase": 1,
             "max": null,
@@ -866,7 +862,7 @@
         }
       }
     ],
-    "schemaVersion": 18,
+    "schemaVersion": 25,
     "style": "dark",
     "tags": [
       "nodejs"
@@ -875,16 +871,22 @@
       "list": [
         {
           "allValue": null,
-          "current": {},
-          "datasource": "${DS_PROMETHEUS}",
-          "definition": "label_values(nodejs_version_info, instance)",
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": "Prometheus",
+          "definition": "label_values(nodejs_active_handles_total, namespace)",
           "hide": 0,
           "includeAll": true,
-          "label": "instance",
+          "label": "namespace",
           "multi": true,
-          "name": "instance",
+          "name": "namespace",
           "options": [],
-          "query": "label_values(nodejs_version_info, instance)",
+          "query": "label_values(nodejs_active_handles_total, namespace)",
           "refresh": 1,
           "regex": "",
           "skipUrlSync": false,
@@ -894,16 +896,44 @@
           "tagsQuery": "",
           "type": "query",
           "useTags": false
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": true,
+            "tags": [],
+            "text": "front-end-7c7b997dbb-pbrwh",
+            "value": [
+              "front-end-7c7b997dbb-pbrwh"
+            ]
+          },
+          "datasource": "Prometheus",
+          "definition": "label_values(nodejs_active_handles_total{namespace=\"$namespace\"},pod_name)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "pod",
+          "multi": true,
+          "name": "pod",
+          "options": [],
+          "query": "label_values(nodejs_active_handles_total{namespace=\"$namespace\"},pod_name)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
         }
       ]
     },
     "time": {
-      "from": "now-1h",
+      "from": "now-30m",
       "to": "now"
     },
     "timepicker": {
       "refresh_intervals": [
-        "5s",
         "10s",
         "30s",
         "1m",
@@ -929,5 +959,5 @@
     "timezone": "",
     "title": "NodeJS Application Dashboard",
     "uid": "PTSqcpJWk",
-    "version": 1
+    "version": 9
   }
