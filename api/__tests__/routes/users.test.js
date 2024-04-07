@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../app');
 const { db, client } = require('../../services/database'); 
 
-describe('Get Users', () => {
+describe('Get Users',  () => {
 	beforeEach(async () => {
 		await db.collection('users').deleteMany({});
 	});
