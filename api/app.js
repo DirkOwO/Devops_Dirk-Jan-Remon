@@ -6,9 +6,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const cors = require('cors');
-require('dotenv').config()
+require('dotenv').config();
 
-var promBundle = require('express-prom-bundle')
+var promBundle = require('express-prom-bundle');
 const metricsMiddleware = promBundle({
 	includePath: true,
 	includeStatusCode: true,
@@ -16,7 +16,7 @@ const metricsMiddleware = promBundle({
 	promClient: {
 		collectDefaultMetrics: {}
 	}
-})
+});
 
 const corsOptions ={
 	origin:'http://127.0.0.1:8080',
@@ -47,7 +47,7 @@ if (require.main === module && cluster.isMaster) {
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, 'public')));
 
-	app.use(metricsMiddleware)
+	app.use(metricsMiddleware);
 
 	app.use('/', indexRouter);
 	app.use('/users', usersRouter);
