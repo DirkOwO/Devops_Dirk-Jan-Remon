@@ -16,16 +16,16 @@ const os = require('os');
 const numCPUs = os.cpus().length;
 
 if (cluster.isMaster) {
-  console.log(`Master process ${process.pid} is running`);
+	console.log(`Master process ${process.pid} is running`);
 
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+	for (let i = 0; i < numCPUs; i++) {
+		cluster.fork();
+	}
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker process ${worker.process.pid} died. Restarting...`);
-    cluster.fork();
-  });
+	cluster.on('exit', (worker, code, signal) => {
+		console.log(`Worker process ${worker.process.pid} died. Restarting...`);
+		cluster.fork();
+	});
 } else {
 	const app = express();
 	app.use(cors(corsOptions)); 
@@ -49,6 +49,6 @@ if (cluster.isMaster) {
 	});
 
 	app.listen(3000, () => {
-	console.log(`Worker process ${process.pid} is listening on port 3000`);
+		console.log(`Worker process ${process.pid} is listening on port 3000`);
 	});
 }
