@@ -8,7 +8,6 @@ var usersRouter = require('./routes/users');
 const cors = require('cors');
 require('dotenv').config()
 
-var socket = require('./socketapi')
 var promBundle = require('express-prom-bundle')
 const metricsMiddleware = promBundle({
 	includePath: true,
@@ -67,6 +66,4 @@ if (cluster.isMaster) {
 	const server = app.listen(process.env.PORT, () => {
 		console.log('Express server is listening on port 3000');
 	});
-
-	socket.io.attach(server)
 }
