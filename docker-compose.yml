@@ -73,6 +73,8 @@ services:
       - prometheus-data:/prometheus
     ports:
       - 9090:9090
+    depends_on:
+      - api
     command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
   grafana:
     build: ./grafana
