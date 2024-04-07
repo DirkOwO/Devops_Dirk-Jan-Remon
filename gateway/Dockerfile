@@ -8,6 +8,6 @@ RUN npm install
 
 RUN npm i nodemon -g
 
-EXPOSE 5000
+EXPOSE 4000
 
 CMD npm start

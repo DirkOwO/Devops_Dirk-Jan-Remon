@@ -1,24 +1,38 @@
 version: '3.8'
 
 services:
-  
-  # Database - Mongo DB
-
+  messagebus:
+    image: rabbitmq:latest
+    container_name: messagebus
+    hostname: "messagebus"
+    labels:
+      NAME: "messagebus"
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 5673:5673
+      - 5674:5674
   api:
     build: ./api
     ports:
-      - 3000:3000
-    depends_on:
-    - mongo
+      - 5000:5000
     environment:
       MONGO_URL: "mongodb://mongo:27017"
       DB_NAME: "mydb"
+      MESSAGE_QUEUE: "amqp://messagebus"
+      PORT: 5000
+    deploy:
+      restart_policy: 
+        condition: on-failure
+    depends_on:
+      - mongo
+      - messagebus
     links:
-        - mongo
+      - mongo
   frontend: 
     build: ./front-end
     ports:
-      - 8080:8080
+      - 8080:80
   mongo:
     image: mongo
     ports:
@@ -30,20 +44,41 @@ services:
     restart: always
     volumes:
       - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-
-  # # Database Manager
-  # mongo-express:
-  #   image: mongo-express
-  #   ports:
-  #     - 8099:8081
-  #   depends_on:
-  #     - mongo
-  #   environment:
-  #     ME_CONFIG_BASICAUTH_USERNAME: express
-  #     ME_CONFIG_BASICAUTH_PASSWORD: 123456
-  #     ME_CONFIG_MONGODB_PORT: 27017
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: test
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
-  #   restart: always
-  #   links:
-  #     - mongo
+  logging:
+    build: './logging'
+    environment:
+      MESSAGE_QUEUE: "amqp://messagebus"
+    volumes:
+      - ./data:/data
+    deploy:
+      restart_policy: 
+        condition: on-failure
+    depends_on:
+      - messagebus
+  gateway:
+    build: './gateway'
+    deploy:
+      restart_policy: 
+        condition: on-failure
+    depends_on:
+      - api
+      - frontend
+    ports:
+      - 4000:4000
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      - 9090:9090
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+  grafana:
+    build: ./grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+volumes:
+  prometheus-data:

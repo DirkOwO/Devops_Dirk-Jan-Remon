@@ -4,10 +4,8 @@ WORKDIR ./prod
 
 COPY . .
 
+VOLUME ["/data"]
+
 RUN npm install
-
-RUN npm i nodemon -g
-
-EXPOSE 5000
 
 CMD npm start

@@ -1,6 +1,13 @@
 const request = require('supertest');
-const app = require('../../app');
+var express = require('express');
+var usersRouter = require('../../routes/users');
 const { db, client } = require('../../services/database'); 
+
+const app = express();
+app.use('/users', usersRouter);
+const server = app.listen(5000, () => {
+	console.log('Express server is listening on port 5000');
+});
 
 describe('Get Users', () => {
 	beforeEach(async () => {
@@ -8,7 +15,8 @@ describe('Get Users', () => {
 	});
 
 	afterAll(async() => {
-		client.close();
+		server.close();
+		await client.close();
 	});
 
 	it('should get all users in array', async () => {
