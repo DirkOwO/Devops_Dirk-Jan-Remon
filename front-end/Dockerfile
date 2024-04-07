@@ -17,9 +17,9 @@ RUN npm run build
 # Make app available with nginx server
 FROM nginx:latest
 
-#COPY nginx.conf /etc/nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 
-CMD type /etc/nginx/nginx.conf
+#CMD cat /etc/nginx/nginx.conf
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
