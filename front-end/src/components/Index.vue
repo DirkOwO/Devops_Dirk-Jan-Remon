@@ -12,7 +12,7 @@ export default {
 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users");
+        const response = await fetch("/api/users");
         const result = await response.json();
         fact.value = result;
       } catch (error) {
@@ -22,7 +22,7 @@ export default {
 
     const postData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users", {
+        const response = await fetch("/api/users", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
