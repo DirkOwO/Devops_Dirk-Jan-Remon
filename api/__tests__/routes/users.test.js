@@ -1,6 +1,13 @@
 const request = require('supertest');
-const {app, server} = require('../../app');
+var express = require('express');
+var usersRouter = require('../../routes/users');
 const { db, client } = require('../../services/database'); 
+
+const app = express();
+app.use('/users', usersRouter);
+const server = app.listen(process.env.PORT, () => {
+	console.log(`Express server is listening on port ${process.env.PORT}`);
+});
 
 describe('Get Users', () => {
 	beforeEach(async () => {
