@@ -1,14 +1,15 @@
 const request = require('supertest');
-const app = require('../../app');
+const {app, server} = require('../../app');
 const { db, client } = require('../../services/database'); 
 
-describe('Get Users',  () => {
+describe('Get Users', () => {
 	beforeEach(async () => {
 		await db.collection('users').deleteMany({});
 	});
 
 	afterAll(async() => {
-		client.close();
+		server.close();
+		await client.close();
 	});
 
 	it('should get all users in array', async () => {

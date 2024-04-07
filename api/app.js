@@ -63,10 +63,10 @@ if (require.main === module && cluster.isMaster) {
 		
 	});
 
-	app.listen(process.env.PORT, () => {
+	const server = app.listen(process.env.PORT, () => {
 		console.log(`Express server is listening on port ${process.env.PORT}`);
 	});
 
 	if (require.main !== module)
-		module.exports = app;
+		module.exports = {app,server};
 }
